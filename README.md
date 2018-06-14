@@ -13,7 +13,7 @@ yarn add gatsby-source-elasticsearch
 ## Options
 
 | Option | Description | Type |
-| --- | --- |
+| --- | --- | --- |
 | connection | Connection details | string, object |
 | index | The index to query against | string |
 | typeName | The type name to generate in Gatsby | string |
