@@ -7,6 +7,12 @@ This plugin uses the Elastisearch Scroll API to obtain any number of documents.
 ## Installation
 
 ```sh
+npm install gatsby-source-elasticsearch
+```
+
+or
+
+```sh
 yarn add gatsby-source-elasticsearch
 ```
 
@@ -18,6 +24,10 @@ yarn add gatsby-source-elasticsearch
 | index | The index to query against | string |
 | typeName | The type name to generate in Gatsby | string |
 | query | The query to run | string, object |
+| scrollDuration | Scroll duration (default: 30s) | string |
+| scrollSize | Scroll size (default: 1000) | integer |
+
+For more information on `scrollDuration` and `scrollSize`, check out the [Scroll documentation](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-request-scroll.html). `scrollDuration` maps to the `scroll` parameter in the documentation, and `scrollSize` to `size`.
 
 ## Config Examples
 
@@ -83,4 +93,5 @@ module.exports = {
   ],
 };
 ```
+
 NOTE: This plugin does not support aggregations.

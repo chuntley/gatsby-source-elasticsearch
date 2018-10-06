@@ -6,7 +6,9 @@ describe('Options Validation', function() {
     connection: 'localhost:9200',
     typeName: 'testName',
     index: 'testIndex',
-    query: 'test:this'
+    query: 'test:this',
+    scrollDuration: '30s',
+    scrollSize: 999,
   }
 
   it('validates the typeName field', function() {
@@ -49,5 +51,28 @@ describe('Options Validation', function() {
     assert.equal(validation(Object.assign({}, options, { connection: '' })), false)
     assert.equal(validation(Object.assign({}, options, { connection: 'localhost:9200' })), true)
     assert.equal(validation(Object.assign({}, options, { connection: { host: 'localhost:9200' } })), true)
+  });
+
+  it('validates the scrollDuration field', function() {
+    const options = Object.assign({}, validOptions);
+    delete options.scrollDuration;
+
+    assert.equal(validation(options), true) // not required
+    assert.equal(validation(Object.assign({}, options, { scrollDuration: null })), true) // not required
+    assert.equal(validation(Object.assign({}, options, { scrollDuration: '' })), true) // not required
+    assert.equal(validation(Object.assign({}, options, { scrollDuration: 'sdf' })), true)
+    assert.equal(validation(Object.assign({}, options, { scrollDuration: '1m' })), true)
+    assert.equal(validation(Object.assign({}, options, { scrollDuration: 123 })), false)
+  });
+
+  it('validates the scrollSize field', function() {
+    const options = Object.assign({}, validOptions);
+    delete options.scrollSize;
+
+    assert.equal(validation(options), true) // not required
+    assert.equal(validation(Object.assign({}, options, { scrollSize: null })), true) // not required
+    assert.equal(validation(Object.assign({}, options, { scrollSize: '' })), true) // not required
+    assert.equal(validation(Object.assign({}, options, { scrollSize: 'sdf' })), false)
+    assert.equal(validation(Object.assign({}, options, { scrollSize: 123 })), true)
   });
 });

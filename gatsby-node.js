@@ -20,18 +20,10 @@ let sourceNodes = exports.sourceNodes = (() => {
 
     const client = new _elasticsearch2.default.Client(clientOptions);
 
-    let search = {
-      index: options.index,
-      scroll: '30s',
-      size: 1000
-    };
-    if (typeof options.query === 'object') Object.assign(search, { body: { query: options.query } });
-    if (typeof options.query === 'string') Object.assign(search, { q: options.query });
-
     // Start scroll with initial query
     let totalProcessed = 0;
     const responseQueue = [];
-    responseQueue.push((yield client.search(search)));
+    responseQueue.push((yield client.search((0, _query2.default)(options))));
 
     while (responseQueue.length) {
       const response = responseQueue.shift();
@@ -81,6 +73,10 @@ var _crypto2 = _interopRequireDefault(_crypto);
 var _elasticsearch = require('elasticsearch');
 
 var _elasticsearch2 = _interopRequireDefault(_elasticsearch);
+
+var _query = require('./query');
+
+var _query2 = _interopRequireDefault(_query);
 
 var _validation = require('./validation');
 

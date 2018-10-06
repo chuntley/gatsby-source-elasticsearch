@@ -5,7 +5,7 @@
   "scripts": {
     "build": "babel src --out-dir . --ignore *.test.js",
     "test": "mocha --require babel-core/register ./src/*.test.js",
-    "test:watch": "mocha --watch --require babel-core/register ./src/index.test.js",
+    "test:watch": "mocha --watch --require babel-core/register ./src/*.test.js",
     "preversion": "yarn test",
     "version": "yarn build"
   },
