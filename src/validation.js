@@ -23,5 +23,17 @@ export default function validation(options) {
     return false;
   }
 
+  if (options.scrollDuration
+    && (typeof options.scrollDuration !== 'string')) {
+    console.log('Error: "scrollDuration" must be a duration string (i.e. 1s, 10s, 1m)');
+    return false;
+  }
+
+  if (options.scrollSize
+    && (isNaN(parseFloat(options.scrollSize)) && !isFinite(options.scrollSize))) {
+    console.log('Error: "scrollSize" must be a number');
+    return false;
+  }
+
   return true;
 }

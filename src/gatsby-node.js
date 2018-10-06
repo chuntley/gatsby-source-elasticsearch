@@ -1,5 +1,6 @@
 import crypto from 'crypto';
 import elasticsearch from 'elasticsearch';
+import query from './query';
 import validation from './validation'
 
 const createContentDigest = obj => crypto.createHash('md5').update(JSON.stringify(obj)).digest('hex');
@@ -15,19 +16,11 @@ export async function sourceNodes({ boundActionCreators }, options) {
 
   const client = new elasticsearch.Client(clientOptions);
   
-  let search = {
-    index: options.index,
-    scroll: '30s',
-    size: 1000,
-  }
-  if (typeof options.query === 'object') Object.assign(search, { body: { query: options.query } })
-  if (typeof options.query === 'string') Object.assign(search, { q: options.query })
-  
   // Start scroll with initial query
   let totalProcessed = 0;
   const responseQueue = [];
   responseQueue.push(
-    await client.search(search)
+    await client.search(query(options))
   );
 
   while (responseQueue.length) {
