@@ -16,7 +16,9 @@ function query(options) {
 
   if (typeof options.query === 'object') {
     return _extends({}, result, {
-      body: _extends({}, options.query)
+      body: {
+        query: options.query
+      }
     });
   }
 
