@@ -1,30 +1,39 @@
+const isString = data =>
+  typeof data === 'string';
+
+const isEmptyString = data =>
+  data === '';
+
+const isObject = data =>
+  typeof data === 'object';
+
 export default function validation(options) {
   if (options.typeName == null
-    || (typeof options.typeName !== 'string' || options.typeName === '')) {
+    || (!isString(options.typeName) || isEmptyString(options.typeName))) {
     console.log('Error: "typeName" option is required');
     return false;
   }
 
   if (options.connection == null
-    || ((typeof options.connection === 'string' && options.connection === '') && typeof options.connection !== 'object')) {
+    || ((isString(options.connection) && isEmptyString(options.connection)) && !isObject(options.connection))) {
     console.log('Error: "connection" option must either be a non-empty string or an object');
     return false;
   }
 
   if (options.index == null
-    || (typeof options.index !== 'string' || options.index === '')) {
+    || (!isString(options.index) || isEmptyString(options.index))) {
     console.log('Error: "index" option is required');
     return false;
   }
 
   if (options.query == null
-    || (typeof options.query !== 'string' && typeof options.query !== 'object')) {
+    || (!isString(options.query) && !isObject(options.query))) {
     console.log('Error: "query" must either be a string or an object');
     return false;
   }
 
   if (options.scrollDuration
-    && (typeof options.scrollDuration !== 'string')) {
+    && (!isString(options.scrollDuration))) {
     console.log('Error: "scrollDuration" must be a duration string (i.e. 1s, 10s, 1m)');
     return false;
   }
