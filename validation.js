@@ -3,21 +3,20 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = validation;
 const isString = data => typeof data === 'string';
 
 const isValidString = data => isString(data) && data.length > 0;
 
 const isObject = data => typeof data === 'object';
 
-function validation({
+const validator = ({
   typeName,
   connection,
   index,
   query,
   scrollDuration,
   scrollSize
-}) {
+}) => {
   const errors = [];
 
   if (!isValidString(typeName)) {
@@ -44,10 +43,18 @@ function validation({
     errors.push('Error: "scrollSize" must be a number');
   }
 
+  return errors;
+};
+
+const validation = exports.validation = options => {
+  const errors = validator(options);
+
   if (errors.length) {
     errors.forEach(error => console.log(error));
     return false;
   }
 
   return true;
-}
+};
+
+exports.default = validation;
