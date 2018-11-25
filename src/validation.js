@@ -1,46 +1,48 @@
 const isString = data =>
   typeof data === 'string';
 
-const isEmptyString = data =>
-  data === '';
+const isValidString = data =>
+  isString(data) && data.length > 0;
 
 const isObject = data =>
   typeof data === 'object';
 
-export default function validation(options) {
-  if (options.typeName == null
-    || (!isString(options.typeName) || isEmptyString(options.typeName))) {
-    console.log('Error: "typeName" option is required');
-    return false;
+export default function validation ({
+  typeName,
+  connection,
+  index,
+  query,
+  scrollDuration,
+  scrollSize
+}) {
+  const errors = [];
+
+  if (!isValidString(typeName)) {
+    errors.push('Error: "typeName" option is required');
   }
 
-  if (options.connection == null
-    || ((isString(options.connection) && isEmptyString(options.connection)) && !isObject(options.connection))) {
-    console.log('Error: "connection" option must either be a non-empty string or an object');
-    return false;
+  if (!connection || !(isValidString(connection) || isObject(connection))) {
+    errors.push('Error: "connection" option must either be a non-empty string or an object');
   }
 
-  if (options.index == null
-    || (!isString(options.index) || isEmptyString(options.index))) {
-    console.log('Error: "index" option is required');
-    return false;
+  if (!isValidString(index)) {
+    errors.push('Error: "index" option is required');
   }
 
-  if (options.query == null
-    || (!isString(options.query) && !isObject(options.query))) {
-    console.log('Error: "query" must either be a string or an object');
-    return false;
+  if (query === null || !(isString(query) || isObject(query))) {
+    errors.push('Error: "query" must either be a string or an object');
   }
 
-  if (options.scrollDuration
-    && (!isString(options.scrollDuration))) {
-    console.log('Error: "scrollDuration" must be a duration string (i.e. 1s, 10s, 1m)');
-    return false;
+  if (scrollDuration && !isValidString(scrollDuration)) {
+    errors.push('Error: "scrollDuration" must be a duration string (i.e. 1s, 10s, 1m)');
   }
 
-  if (options.scrollSize
-    && (isNaN(parseFloat(options.scrollSize)) && !isFinite(options.scrollSize))) {
-    console.log('Error: "scrollSize" must be a number');
+  if (scrollSize && !isFinite(scrollSize)) {
+    errors.push('Error: "scrollSize" must be a number');
+  }
+
+  if (errors.length) {
+    errors.forEach(error => console.log(error));
     return false;
   }
 
