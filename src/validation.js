@@ -7,14 +7,14 @@ const isValidString = data =>
 const isObject = data =>
   typeof data === 'object';
 
-export default function validation ({
+const validator = ({
   typeName,
   connection,
   index,
   query,
   scrollDuration,
   scrollSize
-}) {
+}) => {
   const errors = [];
 
   if (!isValidString(typeName)) {
@@ -41,6 +41,12 @@ export default function validation ({
     errors.push('Error: "scrollSize" must be a number');
   }
 
+  return errors;
+}
+
+export const validation = options => {
+  const errors = validator(options);
+
   if (errors.length) {
     errors.forEach(error => console.log(error));
     return false;
@@ -48,3 +54,5 @@ export default function validation ({
 
   return true;
 }
+
+export default validation;
