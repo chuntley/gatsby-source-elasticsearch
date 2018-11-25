@@ -5,7 +5,7 @@ import validation from './validation'
 
 const createContentDigest = obj => crypto.createHash('md5').update(JSON.stringify(obj)).digest('hex');
 
-export async function sourceNodes({ boundActionCreators }, options) {
+export async function sourceNodes ({ boundActionCreators }, options) {
   const { createNode } = boundActionCreators;
 
   if (!validation(options)) return;
@@ -15,7 +15,7 @@ export async function sourceNodes({ boundActionCreators }, options) {
   if (typeof options.connection === 'object') clientOptions = options.connection;
 
   const client = new elasticsearch.Client(clientOptions);
-  
+
   // Start scroll with initial query
   let totalProcessed = 0;
   const responseQueue = [];
@@ -27,7 +27,7 @@ export async function sourceNodes({ boundActionCreators }, options) {
     const response = responseQueue.shift();
 
     // create nodes from the documents in the response
-    response.hits.hits.forEach(function (hit) {
+    response.hits.hits.forEach(hit => {
       const { _id, _source } = hit;
 
       createNode({
@@ -35,9 +35,9 @@ export async function sourceNodes({ boundActionCreators }, options) {
         id: _id,
         parent: null,
         children: [],
-        internal: { 
-          type: options.typeName, 
-          contentDigest: createContentDigest(_source) 
+        internal: {
+          type: options.typeName,
+          contentDigest: createContentDigest(_source)
         }
       });
 
