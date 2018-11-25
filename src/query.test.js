@@ -42,6 +42,24 @@ describe('Query Builder', function() {
     })
   });
 
+  it('builds an object query body', function() {
+    const options = {
+      index: 'testIndex',
+      body: { query: { test: 'query' } },
+    }
+
+    assert.deepEqual(query(options), {
+      index: 'testIndex',
+      scroll: '30s',
+      size: 1000,
+      body: {
+        query: {
+          test: "query"
+        }
+      }
+    })
+  });
+
   it('sets the scroll size', function() {
     const options = {
       index: 'testIndex',
