@@ -9,11 +9,14 @@ const isValidString = data => isString(data) && data.length > 0;
 
 const isObject = data => typeof data === 'object';
 
-const validator = ({
+const isDefined = data => typeof data !== 'undefined';
+
+const validator = exports.validator = ({
   typeName,
   connection,
   index,
   query,
+  body,
   scrollDuration,
   scrollSize
 }) => {
@@ -31,8 +34,20 @@ const validator = ({
     errors.push('Error: "index" option is required');
   }
 
-  if (query === null || !(isString(query) || isObject(query))) {
+  if (isString(query) && isObject(query) || query === null && !isDefined(body)) {
     errors.push('Error: "query" must either be a string or an object');
+  }
+
+  if (isDefined(query) && isDefined(body)) {
+    errors.push('Error: "query" and "body" are mutually exclusive');
+  }
+
+  if (!isDefined(query) && !isDefined(body)) {
+    errors.push('Error: "query" or "body" is required');
+  }
+
+  if (isDefined(body) && !isObject(body) || body === null && !isDefined(query)) {
+    errors.push('Error: "body" should be an object');
   }
 
   if (scrollDuration && !isValidString(scrollDuration)) {

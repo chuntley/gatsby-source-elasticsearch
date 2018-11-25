@@ -49,12 +49,34 @@ describe('Options Validation', () => {
 
   });
 
-  describe('Validates the query field', () => {
+  describe('Validates the body and query fields concurrence', () => {
     const options = { ...validOptions };
     delete options.query;
 
-    // it('Fails with no query', () =>
-    //   assert.equal(validation(options), false));
+    it('Fails with query and body', () =>
+      assert.equal(validation({ ...options, query: '', body: {} }), false));
+
+    it('Fails with no query neither body', () =>
+      assert.equal(validation({ ...options }), false));
+
+  });
+
+  describe('Validates the body field', () => {
+    const options = { ...validOptions };
+    delete options.query;
+
+    it('Fails with null', () =>
+      assert.equal(validation({ ...options, body: null }), false));
+
+    it('Fails with not-an-object', () =>
+      assert.equal(validation({ ...options, body: '' }), false));
+
+    it('Succeed with object', () =>
+      assert.equal(validation({ ...options, body: { test: 'this' } }), true));
+  });
+
+  describe('Validates the query field', () => {
+    const options = { ...validOptions };
 
     it('Fails with null', () =>
       assert.equal(validation({ ...options, query: null }), false));
