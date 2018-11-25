@@ -57,4 +57,6 @@ const validation = exports.validation = options => {
   return true;
 };
 
+const isValid = exports.isValid = options => !validator(options).length;
+
 exports.default = validation;
