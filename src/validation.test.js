@@ -1,7 +1,9 @@
 import assert from 'assert'
-import validation from './validation'
+import { isValid } from './validation'
 
-describe('Options Validation', function() {
+const validation = isValid;
+
+describe('Options Validation', () => {
   const validOptions = {
     connection: 'localhost:9200',
     typeName: 'testName',
@@ -11,68 +13,148 @@ describe('Options Validation', function() {
     scrollSize: 999,
   }
 
-  it('validates the typeName field', function() {
-    const options = Object.assign({}, validOptions);
+  describe('Validates the typeName field', () => {
+    const options = { ...validOptions };
     delete options.typeName;
 
-    assert.equal(validation(options), false)
-    assert.equal(validation(Object.assign({}, options, { typeName: null })), false)
-    assert.equal(validation(Object.assign({}, options, { typeName: '' })), false)
-    assert.equal(validation(Object.assign({}, options, { typeName: 'test' })), true)
+    it('Fails with no typeName', () =>
+      assert.equal(validation(options), false));
+
+    it('Fails with null', () =>
+      assert.equal(validation({ ...options, typeName: null }), false));
+
+    it('Fails with empty string', () =>
+    assert.equal(validation({ ...options, typeName: '' }), false));
+
+    it('Succeed with non-empty string', () =>
+      assert.equal(validation({ ...options, typeName: 'test' }), true));
+
   });
 
-  it('validates the index field', function() {
-    const options = Object.assign({}, validOptions);
+  describe('Validates the index field', () => {
+    const options = { ...validOptions };
     delete options.index;
 
-    assert.equal(validation(options), false)
-    assert.equal(validation(Object.assign({}, options, { index: null })), false)
-    assert.equal(validation(Object.assign({}, options, { index: '' })), false)
-    assert.equal(validation(Object.assign({}, options, { index: 'test' })), true)
+    it('Fails with no index', () =>
+      assert.equal(validation(options), false));
+
+    it('Fails with null', () =>
+      assert.equal(validation({ ...options, index: null }), false));
+
+    it('Fails with empty string', () =>
+      assert.equal(validation({ ...options, index: '' }), false));
+
+    it('Succeed with non-empty string', () =>
+      assert.equal(validation({ ...options, index: 'test' }), true));
+
   });
-  
-  it('validates the query field', function() {
-    const options = Object.assign({}, validOptions);
+
+  describe('Validates the body and query fields concurrence', () => {
+    const options = { ...validOptions };
     delete options.query;
 
-    assert.equal(validation(options), false)
-    assert.equal(validation(Object.assign({}, options, { query: null })), false)
-    assert.equal(validation(Object.assign({}, options, { query: '' })), true)
-    assert.equal(validation(Object.assign({}, options, { query: 'test' })), true)
-    assert.equal(validation(Object.assign({}, options, { query: { test: 'this' } })), true)
+    it('Fails with query and body', () =>
+      assert.equal(validation({ ...options, query: '', body: {} }), false));
+
+    it('Fails with no query neither body', () =>
+      assert.equal(validation({ ...options }), false));
+
   });
 
-  it('validates the connection field', function() {
-    const options = Object.assign({}, validOptions);
+  describe('Validates the body field', () => {
+    const options = { ...validOptions };
+    delete options.query;
+
+    it('Fails with null', () =>
+      assert.equal(validation({ ...options, body: null }), false));
+
+    it('Fails with not-an-object', () =>
+      assert.equal(validation({ ...options, body: '' }), false));
+
+    it('Succeed with object', () =>
+      assert.equal(validation({ ...options, body: { test: 'this' } }), true));
+  });
+
+  describe('Validates the query field', () => {
+    const options = { ...validOptions };
+
+    it('Fails with null', () =>
+      assert.equal(validation({ ...options, query: null }), false));
+
+    it('Succeed with empty string', () =>
+      assert.equal(validation({ ...options, query: '' }), true));
+
+    it('Succeed with non-empty string', () =>
+      assert.equal(validation({ ...options, query: 'test' }), true));
+
+    it('Succeed with object', () =>
+      assert.equal(validation({ ...options, query: { test: 'this' } }), true));
+
+  });
+
+  describe('Validates the connection field', () => {
+    const options = { ...validOptions };
     delete options.connection;
 
-    assert.equal(validation(options), false)
-    assert.equal(validation(Object.assign({}, options, { connection: null })), false)
-    assert.equal(validation(Object.assign({}, options, { connection: '' })), false)
-    assert.equal(validation(Object.assign({}, options, { connection: 'localhost:9200' })), true)
-    assert.equal(validation(Object.assign({}, options, { connection: { host: 'localhost:9200' } })), true)
+    it('Fails with no connection', () =>
+      assert.equal(validation(options), false));
+
+    it('Fails with null', () =>
+      assert.equal(validation({ ...options, connection: null }), false));
+
+    it('Fails with empty string', () =>
+      assert.equal(validation({ ...options, connection: '' }), false));
+
+    it('Succeed with non-empty string', () =>
+      assert.equal(validation({ ...options, connection: 'localhost:9200' }), true));
+
+    it('Succeed with object', () =>
+      assert.equal(validation({ ...options, connection: { host: 'localhost:9200' } }), true));
+
   });
 
-  it('validates the scrollDuration field', function() {
-    const options = Object.assign({}, validOptions);
+  describe('Validates the scrollDuration field', () => {
+    const options = { ...validOptions };
     delete options.scrollDuration;
 
-    assert.equal(validation(options), true) // not required
-    assert.equal(validation(Object.assign({}, options, { scrollDuration: null })), true) // not required
-    assert.equal(validation(Object.assign({}, options, { scrollDuration: '' })), true) // not required
-    assert.equal(validation(Object.assign({}, options, { scrollDuration: 'sdf' })), true)
-    assert.equal(validation(Object.assign({}, options, { scrollDuration: '1m' })), true)
-    assert.equal(validation(Object.assign({}, options, { scrollDuration: 123 })), false)
+    it('Succeed with no scrollDuration', () =>
+      assert.equal(validation(options), true)); // not required
+
+    it('Succeed with null', () =>
+      assert.equal(validation({ ...options, scrollDuration: null }), true)); // not required
+
+    it('Succeed with empty string', () =>
+      assert.equal(validation({ ...options, scrollDuration: '' }), true)); // not required
+
+    it('Succeed with non-empty string', () =>
+      assert.equal(validation({ ...options, scrollDuration: 'sdf' }), true));
+
+    it('Succeed with object', () =>
+      assert.equal(validation({ ...options, scrollDuration: '1m' }), true));
+
+    it('Fails with integer', () =>
+      assert.equal(validation({ ...options, scrollDuration: 123 }), false));
+
   });
 
-  it('validates the scrollSize field', function() {
-    const options = Object.assign({}, validOptions);
+  describe('Validates the scrollSize field', () => {
+    const options = { ...validOptions };
     delete options.scrollSize;
 
-    assert.equal(validation(options), true) // not required
-    assert.equal(validation(Object.assign({}, options, { scrollSize: null })), true) // not required
-    assert.equal(validation(Object.assign({}, options, { scrollSize: '' })), true) // not required
-    assert.equal(validation(Object.assign({}, options, { scrollSize: 'sdf' })), false)
-    assert.equal(validation(Object.assign({}, options, { scrollSize: 123 })), true)
+    it('Succeed with no scrollSize', () =>
+      assert.equal(validation(options), true)); // not required
+
+    it('Succeed with null', () =>
+      assert.equal(validation({ ...options, scrollSize: null }), true)); // not required
+
+    it('Succeed with empty string', () =>
+      assert.equal(validation({ ...options, scrollSize: '' }), true)); // not required
+
+    it('Succeed with non-empty string', () =>
+      assert.equal(validation({ ...options, scrollSize: 'sdf' }), false));
+
+    it('Fails with integer', () =>
+      assert.equal(validation({ ...options, scrollSize: 123 }), true));
+
   });
 });
