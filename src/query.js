@@ -9,7 +9,7 @@ export default function query(options) {
     return {
       ...result,
       body: {
-        ...options.query,
+        query: options.query,
       },
     };
   }
