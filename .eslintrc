@@ -1,10 +1,16 @@
 {
   "extends": "airbnb",
   "env": {
-    "node": true
+    "node": true,
+    "mocha": true,
   },
   "parserOptions": {
     "ecmaVersion": 2018,
     "sourceType": "module"
+  },
+  "rules": {
+    "import/prefer-default-export": ["off"],
+    "no-plusplus": ["off"],
+    "no-console": ["off"]
   }
 }
