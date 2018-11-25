@@ -1,5 +1,7 @@
 import assert from 'assert'
-import validation from './validation'
+import { isValid } from './validation'
+
+const validation = isValid;
 
 describe('Options Validation', function() {
   const validOptions = {
