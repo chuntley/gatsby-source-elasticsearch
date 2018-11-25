@@ -1,23 +1,36 @@
-export default function query(options) {
-  let result = {
-    index: options.index,
-    scroll: options.scrollDuration || '30s',
-    size: options.scrollSize || 1000,
+const isString = data =>
+  typeof data === 'string';
+
+const isObject = data =>
+  typeof data === 'object';
+
+export default ({ index, scrollDuration, scrollSize, query, body }) => {
+  const result = {
+    index,
+    scroll: scrollDuration || '30s',
+    size: scrollSize || 1000,
   }
 
-  if (typeof options.query === 'object') {
+  if (isObject(body)) {
+    return {
+      ...result,
+      body: body,
+    }
+  }
+
+  if (isObject(query)) {
     return {
       ...result,
       body: {
-        query: options.query,
+        query,
       },
     };
   }
 
-  if (typeof options.query === 'string') {
+  if (isString(query)) {
     return {
       ...result,
-      q: options.query,
+      q: query,
     };
   }
 
