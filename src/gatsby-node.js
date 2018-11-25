@@ -52,8 +52,8 @@ export async function sourceNodes({ boundActionCreators }, options) {
 
     // Continue scroll query
     responseQueue.push(
-      await client.scroll({
-        scrollId: response._scroll_id,
+      await client.scroll({ // eslint-disable-line no-await-in-loop
+        scrollId: response._scroll_id, // eslint-disable-line no-underscore-dangle
         scroll: '30s',
       }),
     );
