@@ -23,9 +23,12 @@ yarn add gatsby-source-elasticsearch
 | connection | Connection details | string, object |
 | index | The index to query against | string |
 | typeName | The type name to generate in Gatsby | string |
-| query | The query to run | string, object |
+| query | The query as query string to run | string, object |
+| body | The [query body](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-request-body.html) to run | object |
 | scrollDuration | Scroll duration (default: 30s) | string |
 | scrollSize | Scroll size (default: 1000) | integer |
+
+*Fields `query` and `body` are mutually exclusive.*
 
 For more information on `scrollDuration` and `scrollSize`, check out the [Scroll documentation](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-request-scroll.html). `scrollDuration` maps to the `scroll` parameter in the documentation, and `scrollSize` to `size`.
 
