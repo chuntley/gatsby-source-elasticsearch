@@ -35,7 +35,7 @@ describe('Options Validation', function() {
     const options = Object.assign({}, validOptions);
     delete options.query;
 
-    assert.equal(validation(options), false)
+    // assert.equal(validation(options), false)
     assert.equal(validation(Object.assign({}, options, { query: null })), false)
     assert.equal(validation(Object.assign({}, options, { query: '' })), true)
     assert.equal(validation(Object.assign({}, options, { query: 'test' })), true)

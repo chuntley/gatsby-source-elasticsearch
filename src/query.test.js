@@ -27,7 +27,9 @@ describe('Query Builder', function() {
   it('builds an object query', function() {
     const options = {
       index: 'testIndex',
-      query: { test: 'query' }
+      query: {
+        query: { test: 'query' }
+      }
     }
 
     assert.deepEqual(query(options), { 
