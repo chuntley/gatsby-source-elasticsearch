@@ -3,37 +3,75 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = validation;
-function validation(options) {
-  if (options.typeName == null || typeof options.typeName !== 'string' || options.typeName === '') {
-    console.log('Error: "typeName" option is required');
-    return false;
+const isString = data => typeof data === 'string';
+
+const isValidString = data => isString(data) && data.length > 0;
+
+const isObject = data => typeof data === 'object';
+
+const isDefined = data => typeof data !== 'undefined';
+
+const validator = exports.validator = ({
+  typeName,
+  connection,
+  index,
+  query,
+  body,
+  scrollDuration,
+  scrollSize
+}) => {
+  const errors = [];
+
+  if (!isValidString(typeName)) {
+    errors.push('Error: "typeName" option is required');
   }
 
-  if (options.connection == null || typeof options.connection === 'string' && options.connection === '' && typeof options.connection !== 'object') {
-    console.log('Error: "connection" option must either be a non-empty string or an object');
-    return false;
+  if (!connection || !(isValidString(connection) || isObject(connection))) {
+    errors.push('Error: "connection" option must either be a non-empty string or an object');
   }
 
-  if (options.index == null || typeof options.index !== 'string' || options.index === '') {
-    console.log('Error: "index" option is required');
-    return false;
+  if (!isValidString(index)) {
+    errors.push('Error: "index" option is required');
   }
 
-  if (options.query == null || typeof options.query !== 'string' && typeof options.query !== 'object') {
-    console.log('Error: "query" must either be a string or an object');
-    return false;
+  if (isString(query) && isObject(query) || query === null && !isDefined(body)) {
+    errors.push('Error: "query" must either be a string or an object');
   }
 
-  if (options.scrollDuration && typeof options.scrollDuration !== 'string') {
-    console.log('Error: "scrollDuration" must be a duration string (i.e. 1s, 10s, 1m)');
-    return false;
+  if (isDefined(query) && isDefined(body)) {
+    errors.push('Error: "query" and "body" are mutually exclusive');
   }
 
-  if (options.scrollSize && isNaN(parseFloat(options.scrollSize)) && !isFinite(options.scrollSize)) {
-    console.log('Error: "scrollSize" must be a number');
+  if (!isDefined(query) && !isDefined(body)) {
+    errors.push('Error: "query" or "body" is required');
+  }
+
+  if (isDefined(body) && !isObject(body) || body === null && !isDefined(query)) {
+    errors.push('Error: "body" should be an object');
+  }
+
+  if (scrollDuration && !isValidString(scrollDuration)) {
+    errors.push('Error: "scrollDuration" must be a duration string (i.e. 1s, 10s, 1m)');
+  }
+
+  if (scrollSize && !isFinite(scrollSize)) {
+    errors.push('Error: "scrollSize" must be a number');
+  }
+
+  return errors;
+};
+
+const validation = exports.validation = options => {
+  const errors = validator(options);
+
+  if (errors.length) {
+    errors.forEach(error => console.log(error));
     return false;
   }
 
   return true;
-}
+};
+
+const isValid = exports.isValid = options => !validator(options).length;
+
+exports.default = validation;
