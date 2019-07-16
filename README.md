@@ -22,6 +22,7 @@ yarn add gatsby-source-elasticsearch
 | --- | --- | --- |
 | connection | Connection details | string, object |
 | index | The index to query against | string |
+| type | The object type of query (optional) | string |
 | typeName | The type name to generate in Gatsby | string |
 | query | The query as query string to run | string, object |
 | body | The [query body](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-request-body.html) to run | object |

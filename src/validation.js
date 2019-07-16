@@ -14,6 +14,7 @@ export const validator = ({
   typeName,
   connection,
   index,
+  type,
   query,
   body,
   scrollDuration,
@@ -55,6 +56,10 @@ export const validator = ({
 
   if (scrollSize && !isFinite(scrollSize)) {
     errors.push('Error: "scrollSize" must be a number');
+  }
+
+  if (isDefined(type) && !isValidString(type)) {
+    errors.push('Error: "type" is optional and if exists must either be a string');
   }
 
   return errors;

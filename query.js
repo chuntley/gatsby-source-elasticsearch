@@ -10,9 +10,10 @@ const isString = data => typeof data === 'string';
 
 const isObject = data => typeof data === 'object';
 
-exports.default = ({ index, scrollDuration, scrollSize, query, body }) => {
+exports.default = ({ index, scrollDuration, scrollSize, query, body, type }) => {
   const result = {
     index,
+    type,
     scroll: scrollDuration || '30s',
     size: scrollSize || 1000
   };
