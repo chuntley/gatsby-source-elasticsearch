@@ -27,6 +27,7 @@ yarn add gatsby-source-elasticsearch
 | body | The [query body](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-request-body.html) to run | object |
 | scrollDuration | Scroll duration (default: 30s) | string |
 | scrollSize | Scroll size (default: 1000) | integer |
+| logMessage | Optionally set another log message when document collection is complete | string |
 
 *Fields `query` and `body` are mutually exclusive.*
 
