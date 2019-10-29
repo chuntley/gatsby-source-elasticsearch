@@ -49,7 +49,7 @@ let sourceNodes = exports.sourceNodes = (() => {
 
       // check to see if we have collected all of the documents
       if (totalProcessed >= response.hits.total) {
-        console.log(`\nSuccessfully processed ${totalProcessed} ${options.typeName} documents\n`);
+        console.log(options.logMessage || `\nSuccessfully processed ${totalProcessed} ${options.typeName} documents\n`);
         break;
       }
 
